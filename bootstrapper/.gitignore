@@ -1,0 +1,14 @@
+
+# Environment
+.env
+
+# PostgreSQL data
+.volumes/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+

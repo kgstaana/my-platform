@@ -1,0 +1,27 @@
+FROM postgres:18-alpine
+
+RUN apk update \
+    && apk upgrade --no-cache \
+    && apk add --no-cache postgis \
+    && cp /usr/lib/postgresql18/*.so /usr/local/lib/postgresql/ \
+    && cp /usr/share/postgresql18/extension/postgis* /usr/local/share/postgresql/extension/ \
+    && apk add --no-cache geos gdal proj sfcgal json-c protobuf-c libxml2 pcre2 libpq \
+    && apk del postgis postgresql18 postgresql18-client postgresql-common
+
+RUN mkdir -p /docker-entrypoint-initdb.d
+
+COPY ./postgres-scripts/initdb-postgis.sh /docker-entrypoint-initdb.d/10_postgis.sh
+
+# Create application databases
+COPY ./postgres-scripts/create-databases.sh /docker-entrypoint-initdb.d/20_create_databases.sh
+
+COPY ./postgres-scripts/update-postgis.sh /usr/local/bin
+
+COPY wrapper.sh /
+
+RUN chmod +x /wrapper.sh \
+    && chmod +x /docker-entrypoint-initdb.d/*.sh
+
+ENTRYPOINT ["/wrapper.sh"]
+
+CMD ["postgres", "-c", "logging_collector=on", "-c", "log_directory=/logs", "-c", "log_filename=postgresql.log", "-c", "log_statement=all"]
