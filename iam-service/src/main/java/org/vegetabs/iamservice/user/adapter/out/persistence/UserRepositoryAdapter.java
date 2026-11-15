@@ -12,6 +12,9 @@ import org.vegetabs.iamservice.user.adapter.out.persistence.repository.UserJpaRe
 import org.vegetabs.iamservice.user.application.out.UserRepositoryPort;
 import org.vegetabs.iamservice.user.domain.model.User;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -32,5 +35,12 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         return jpaRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return jpaRepository
+            .findById(userId)
+            .map(userMapper::toDomain);
     }
 }

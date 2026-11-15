@@ -1,6 +1,7 @@
 package org.vegetabs.iamservice.verification.application.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.vegetabs.iamservice.verification.application.in.CreateVerificationTokenUseCase;
@@ -16,6 +17,7 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,6 +32,12 @@ public class CreateVerificationTokenService implements CreateVerificationTokenUs
 
     @Override
     public String create(UUID userId, VerificationType type) {
+        log.info(
+            "Creating verification token. userId={}, type={}",
+            userId,
+            type
+        );
+
         String rawToken = generateRawToken();
         String tokenHash = hashToken(rawToken);
 
@@ -42,7 +50,14 @@ public class CreateVerificationTokenService implements CreateVerificationTokenUs
             expiresAt
         );
 
-        verificationTokenRepositoryPort.save(token);
+        VerificationToken verificationToken = verificationTokenRepositoryPort.save(token);
+
+        log.info(
+            "Verification token created successfully. userId={}, type={}, expiresAt={}",
+            verificationToken.userId(),
+            verificationToken.type(),
+            verificationToken.expiresAt()
+        );
 
         return rawToken;
     }

@@ -28,6 +28,8 @@ public class VerificationTokenAdapter implements VerificationTokenRepositoryPort
 
     @Override
     public Optional<VerificationToken> findByTokenHash(String tokenHash) {
-        return Optional.empty();
+        return jpaRepository
+            .findByTokenHash(tokenHash)
+            .map(mapper::toDomain);
     }
 }

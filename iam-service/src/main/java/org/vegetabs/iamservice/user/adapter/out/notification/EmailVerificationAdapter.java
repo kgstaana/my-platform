@@ -19,6 +19,7 @@ public class EmailVerificationAdapter implements EmailVerificationPort {
 
         try {
             // Call notification service
+            log.info("...Raw Token {}", rawToken);
 
             log.info(
                 "Email verification notification successfully requested. userId={}",
