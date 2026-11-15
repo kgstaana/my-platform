@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/iam_development
+    username: postgres
+    password: postgres
+  flyway:
+    enabled: false
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql   # default
+    schema:
+      introspection:
+        enabled: true

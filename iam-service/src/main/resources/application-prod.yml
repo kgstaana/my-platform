@@ -1,0 +1,45 @@
+spring:
+  jpa:
+    show-sql: false
+    open-in-view: false
+  datasource:
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+      minimum-idle: ${DB_POOL_MIN:5}
+      connection-timeout: 30000
+      max-lifetime: 1800000
+  flyway:
+    clean-disabled: true       # never allow flyway clean in prod
+
+server:
+  shutdown: graceful
+  forward-headers-strategy: framework   # correct scheme/host behind ALB/ingress
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+spring.lifecycle:
+  timeout-per-shutdown-phase: 30s
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never       # overrides base "always"
+      show-components: never    # overrides base "always"
+
+logging:
+  level:
+    root: WARN
+    com.yourcompany.iam: INFO

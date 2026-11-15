@@ -1,0 +1,27 @@
+type Query {
+    health: String
+}
+
+type Mutation {
+    registerUser(input: RegisterUserInput!): RegisterUserPayload!
+}
+
+input RegisterUserInput {
+    email: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    phoneNumber: String
+}
+
+type RegisterUserPayload {
+    id: ID!
+    email: String!
+    status: UserStatus!
+    emailVerifiedAt: String
+}
+
+enum UserStatus {
+    PENDING_VERIFICATION
+    ACTIVE
+}

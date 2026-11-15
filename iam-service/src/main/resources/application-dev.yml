@@ -1,0 +1,36 @@
+spring:
+  jpa:
+    show-sql: false            # flip to true only when debugging queries
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+
+server:
+  error:
+    include-message: always
+    include-stacktrace: on_param   # add ?trace=true to see stack traces
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.yourcompany.iam: DEBUG        # change to your base package
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
